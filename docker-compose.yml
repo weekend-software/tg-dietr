@@ -1,0 +1,43 @@
+---
+
+version: "3"
+
+services:
+  # frontend:
+  #   build: ./frontend
+  #   depends_on:
+  #     - data-api
+  #   environment:
+  #     APP_ENV: local
+  #   ports:
+  #     - "8080:80"
+
+  data-api:
+    build: ./data-api
+    depends_on:
+      - influxdb
+    environment:
+      APP_DB_CONFIG: |
+        url: http://influxdb:8086
+        token: e05e8315f285f493c763ccc0de041649
+        org: dietr
+        bucket: data
+    ports:
+      - "8081:3000"
+
+  influxdb:
+    image: influxdb:2.4
+    environment:
+      DOCKER_INFLUXDB_INIT_MODE: setup
+      DOCKER_INFLUXDB_INIT_USERNAME: influxdb
+      DOCKER_INFLUXDB_INIT_PASSWORD: password
+      DOCKER_INFLUXDB_INIT_ORG: dietr
+      DOCKER_INFLUXDB_INIT_BUCKET: data
+      DOCKER_INFLUXDB_INIT_ADMIN_TOKEN: e05e8315f285f493c763ccc0de041649
+    # ports:
+    #   - 8086
+    volumes:
+      - influxdb-data:/var/lib/influxdb2
+
+volumes:
+  influxdb-data:
