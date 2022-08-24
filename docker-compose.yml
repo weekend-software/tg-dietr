@@ -20,7 +20,7 @@ services:
       APP_DB_CONFIG: |
         url: http://influxdb:8086
         token: e05e8315f285f493c763ccc0de041649
-        org: dietr
+        org: sweight
         bucket: data
     ports:
       - "8081:3000"
@@ -31,7 +31,7 @@ services:
       DOCKER_INFLUXDB_INIT_MODE: setup
       DOCKER_INFLUXDB_INIT_USERNAME: influxdb
       DOCKER_INFLUXDB_INIT_PASSWORD: password
-      DOCKER_INFLUXDB_INIT_ORG: dietr
+      DOCKER_INFLUXDB_INIT_ORG: sweight
       DOCKER_INFLUXDB_INIT_BUCKET: data
       DOCKER_INFLUXDB_INIT_ADMIN_TOKEN: e05e8315f285f493c763ccc0de041649
     # ports:
