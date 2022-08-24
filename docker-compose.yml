@@ -21,7 +21,7 @@ services:
         url: http://influxdb:8086
         token: e05e8315f285f493c763ccc0de041649
         org: sweight
-        bucket: data
+      APP_DB_BUCKET: data
     ports:
       - "8081:3000"
 
@@ -34,8 +34,8 @@ services:
       DOCKER_INFLUXDB_INIT_ORG: sweight
       DOCKER_INFLUXDB_INIT_BUCKET: data
       DOCKER_INFLUXDB_INIT_ADMIN_TOKEN: e05e8315f285f493c763ccc0de041649
-    # ports:
-    #   - 8086
+    ports:
+      - "8086:8086"
     volumes:
       - influxdb-data:/var/lib/influxdb2
 
