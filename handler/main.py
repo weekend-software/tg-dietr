@@ -1,5 +1,7 @@
 import telebot
 import os
+import requests
+
 
 DATA_API_URL = os.environ.get("APP_DATA_API_URL")
 
@@ -8,8 +10,9 @@ API_TOKEN = os.environ.get('APP_TELEGRAM_TOKEN')
 bot = telebot.TeleBot(API_TOKEN)
 
 
-# Handle '/start' and '/help'
-@bot.message_handler(commands=['help', 'start'])
+# TODO Process /help intro message
+
+@bot.message_handler(commands=['start'])
 def start(message):
     bot.reply_to(message, "Hi there, I am Sweight.")
 
@@ -18,8 +21,11 @@ def start(message):
 
     if resp.status_code == requests.codes.ok:
         bot.reply_to(message, "Пользователь зарегистрирован")
+
     elif resp.status_code == requests.codes.conflict:
         bot.reply_to(message, "Пользователь уже существует")
+        resp = requests.patch(f"{DATA_API_URL}/users/{user_id}/activate")
+
     else:
         bot.reply_to(message, "Что-то пошло не так. Попробуйте позже.")
 
@@ -29,7 +35,7 @@ def stop(message):
     bot.reply_to(message, "Stopping")
 
     user_id = message.from_user.id
-    resp = requests.post(f"{DATA_API_URL}/users/{user_id}/deactivate")
+    resp = requests.patch(f"{DATA_API_URL}/users/{user_id}/deactivate")
 
 
 # Handle all other messages with content_type 'text' (content_types defaults to ['text'])
