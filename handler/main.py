@@ -1,6 +1,8 @@
 import telebot
 import os
 
+DATA_API_URL = os.environ.get("APP_DATA_API_URL")
+
 API_TOKEN = os.environ.get('APP_TELEGRAM_TOKEN')
 
 bot = telebot.TeleBot(API_TOKEN)
@@ -8,11 +10,26 @@ bot = telebot.TeleBot(API_TOKEN)
 
 # Handle '/start' and '/help'
 @bot.message_handler(commands=['help', 'start'])
-def send_welcome(message):
-    bot.reply_to(message, """\
-Hi there, I am Sweight.
-I am here to echo your kind words back to you. Just say anything nice and I'll say the exact same thing to you!\
-""")
+def start(message):
+    bot.reply_to(message, "Hi there, I am Sweight.")
+
+    user_id = message.from_user.id
+    resp = requests.post(f"{DATA_API_URL}/users/register", json={"id": user_id})
+
+    if resp.status_code == requests.codes.ok:
+        bot.reply_to(message, "Пользователь зарегистрирован")
+    elif resp.status_code == requests.codes.conflict:
+        bot.reply_to(message, "Пользователь уже существует")
+    else:
+        bot.reply_to(message, "Что-то пошло не так. Попробуйте позже.")
+
+
+@bot.message_handler(commands=['stop'])
+def stop(message):
+    bot.reply_to(message, "Stopping")
+
+    user_id = message.from_user.id
+    resp = requests.post(f"{DATA_API_URL}/users/{user_id}/deactivate")
 
 
 # Handle all other messages with content_type 'text' (content_types defaults to ['text'])
