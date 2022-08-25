@@ -51,7 +51,7 @@ async def users_register(user: User):
 
     if user_exists:
         user = user_helper.get(id=user.id)
-        raise HTTPException(status_code=409, content={"detail": "User already exists", "user": user})
+        raise HTTPException(status_code=409, detail={"message": "User already exists", "user": user})
 
     user_helper.create_and_activate(id=user.id)
 
