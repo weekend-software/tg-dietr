@@ -24,7 +24,11 @@ def start(message):
 
     elif resp.status_code == requests.codes.conflict:
         bot.reply_to(message, "Пользователь уже существует")
-        resp = requests.patch(f"{DATA_API_URL}/users/{user_id}/activate")
+
+        data = resp.json()
+
+        if data.get("user").get("is_active") == False:
+            resp = requests.patch(f"{DATA_API_URL}/users/{user_id}/activate")
 
     else:
         bot.reply_to(message, "Что-то пошло не так. Попробуйте позже.")
