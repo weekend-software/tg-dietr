@@ -3,7 +3,7 @@ import os
 import sys
 import yaml
 
-from fastapi import FastAPI, HTTPException, Response, status
+from fastapi import FastAPI, Response, status
 
 from models.user import User
 from models.metric import Metric
