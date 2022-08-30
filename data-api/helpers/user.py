@@ -50,18 +50,20 @@ class UserHelper(BaseHelper):
 
         tables = self.query_api.query(query=q, params=p)
 
+        params = {}
+
         for table in tables:
             for record in table.records:
                 if record.values.get("_field") == "exists":
-                    created_at = record.values.get("_time")
+                    params["created_at"] = record.values.get("_time")
 
                 if record.values.get("_field") == "activation":
-                    activated_at = record.values.get("_time")
+                    params["activated_at"] = record.values.get("_time")
 
                 if record.values.get("_field") == "deactivation":
-                    deactivated_at = record.values.get("_time")
+                    params["deactivated_at"] = record.values.get("_time")
 
-        return User(id=id, created_at=created_at, activated_at=activated_at, deactivated_at=deactivated_at)
+        return User(id=id, **params)
 
     def list(self):
         q = """

@@ -3,7 +3,7 @@ import os
 import sys
 import yaml
 
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, Response, status
 
 from models.user import User
 from models.metric import Metric
@@ -46,17 +46,23 @@ async def health():
 
 
 @app.post("/users/register")
-async def users_register(user: User):
+async def users_register(user: User, response: Response):
     user_exists = user_helper.exists(user.id)
 
     if user_exists:
-        raise HTTPException(status_code=409, detail="User already exists")
+        response.status_code = status.HTTP_409_CONFLICT
+
+        user = user_helper.get(id=user.id)
+
+        return {
+            "detail": "User already exists",
+            "user": user,
+        }
 
     user_helper.create_and_activate(id=user.id)
 
     return {
         "detail": "User created",
-        # TODO Read user back and return object
         "user": user,
     }
 

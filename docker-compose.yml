@@ -25,6 +25,17 @@ services:
     ports:
       - "8081:3000"
 
+  handler:
+    build: ./handler
+    depends_on:
+      - influxdb
+    environment:
+      APP_DATA_API_URL: http://data-api:3000
+    env_file:
+      - handler/secret.env
+    # ports:
+    #   - "8081:3000"
+
   influxdb:
     image: influxdb:2.4
     environment:
