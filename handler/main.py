@@ -20,8 +20,6 @@ i18n = I18n(lang=app_language)
 
 @bot.message_handler(commands=["start"])
 def start(message):
-    bot.reply_to(message, "{welcome}".format(**i18n.lang_map))
-
     user_id = message.from_user.id
     resp = requests.post(f"{DATA_API_URL}/users/register", json={"id": user_id})
 
@@ -38,6 +36,11 @@ def start(message):
 
     else:
         bot.reply_to(message, "{registration_err_unknown}".format(**i18n.lang_map))
+
+
+@bot.message_handler(commands=["welcome"])
+def welcome(message):
+    bot.reply_to(message, "{welcome}".format(**i18n.lang_map))
 
 
 @bot.message_handler(commands=["stop"])

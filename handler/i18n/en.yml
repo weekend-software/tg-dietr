@@ -2,6 +2,14 @@
 
 welcome: 👋 Hi there, I am Sweight. I can assist in tracking your body params.
 
-registration_ok: 😊 User has been registered, we're ready to go!
-registration_err_conflict: 😏 User already exists, glad to see you again.
+registration_ok: |
+  😊 User has been registered, we're ready to go!
+
+  ℹ️ Feel free to start with `/welcome` command.
+
+registration_err_conflict: |
+  😏 User already exists, glad to see you again.
+
+  ℹ️ You may repeat intro with `/welcome` command.
+
 registration_err_unknown: 🤔 Unknown error occured, please try later.
