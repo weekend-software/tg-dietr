@@ -2,6 +2,8 @@ import telebot
 import os
 import requests
 
+from lib.i18n import Internationalization as I18n
+
 
 DATA_API_URL = os.environ.get("APP_DATA_API_URL")
 
@@ -9,22 +11,25 @@ API_TOKEN = os.environ.get("APP_TELEGRAM_TOKEN")
 
 bot = telebot.TeleBot(API_TOKEN)
 
+app_language = os.environ.get("APP_LANG", "en")
+i18n = I18n(lang=app_language)
+
 
 # TODO Process /help intro message
 
 
 @bot.message_handler(commands=["start"])
 def start(message):
-    bot.reply_to(message, "Hi there, I am Sweight.")
+    bot.reply_to(message, "{welcome}".format(**i18n.lang_map))
 
     user_id = message.from_user.id
     resp = requests.post(f"{DATA_API_URL}/users/register", json={"id": user_id})
 
     if resp.status_code == requests.codes.ok:
-        bot.reply_to(message, "Пользователь зарегистрирован")
+        bot.reply_to(message, "{registration_ok}".format(**i18n.lang_map))
 
     elif resp.status_code == requests.codes.conflict:
-        bot.reply_to(message, "Пользователь уже существует")
+        bot.reply_to(message, "{registration_err_conflict}".format(**i18n.lang_map))
 
         data = resp.json()
 
@@ -32,7 +37,7 @@ def start(message):
             resp = requests.patch(f"{DATA_API_URL}/users/{user_id}/activate")
 
     else:
-        bot.reply_to(message, "Что-то пошло не так. Попробуйте позже.")
+        bot.reply_to(message, "{registration_err_unknown}".format(**i18n.lang_map))
 
 
 @bot.message_handler(commands=["stop"])
