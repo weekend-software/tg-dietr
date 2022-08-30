@@ -1,2 +1,4 @@
 pyTelegramBotAPI==4.7.0
+python-box==6.0.2
+PyYAML==6.0
 requests==2.28.1
