@@ -25,6 +25,13 @@ services:
     ports:
       - "8081:3000"
 
+  reminder:
+    build: ./reminder
+    environment:
+      APP_DEV_MODE: "yes"
+    # env_file:
+    #   - reminder/secret.env
+
   handler:
     build: ./handler
     depends_on:
