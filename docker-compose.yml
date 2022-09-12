@@ -29,8 +29,8 @@ services:
     build: ./reminder
     environment:
       APP_DEV_MODE: "yes"
-    # env_file:
-    #   - reminder/secret.env
+    env_file:
+      - reminder/secret.env
 
   handler:
     build: ./handler
